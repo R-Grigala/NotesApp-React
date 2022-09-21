@@ -1,9 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as ChevronLeft } from '../assets/chevron-left.svg'
 
 const NotePage = () => {
-    let { id } = useParams();
+    const { id } = useParams();
+    const navigate = useNavigate();
     let noteId = id
     let [note, setNote] = useState(null)
 
@@ -18,17 +19,30 @@ const NotePage = () => {
         let data = await response.json();
         setNote(data)
     }
+
+    let updateNote = async () => {
+        fetch(`/api/notes/${noteId}/update/`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(note)
+        })
+    }
+
+    let handleSubmit = () => {
+        updateNote()
+        navigate('/')
+    }
     return (
         <div className='note'>
             <div className='note-header'>
                 <h3>
-                    <Link to='/'>
-                        <ChevronLeft />
-                    </Link>
+                    <ChevronLeft onClick={handleSubmit}/>
                 </h3>
                
             </div>
-            <textarea defaultValue={note?.body}></textarea>
+            <textarea onChange={(e) => {setNote({...note, 'body':e.target.value})}} defaultValue={note?.body}></textarea>
         </div>
     )
 }
