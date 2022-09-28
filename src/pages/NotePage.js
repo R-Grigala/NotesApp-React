@@ -24,8 +24,8 @@ const NotePage = () => {
 
 
     let createNote = async () => {
-        fetch(`/api/notes/${noteId}/update/`, {
-            method: "PUT",
+        fetch(`/api/notes/create/`, {
+            method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -54,12 +54,18 @@ const NotePage = () => {
     }
 
     let handleSubmit = () => {
-        if (noteId !== 'new' && !note.body) {
+        if (noteId !== 'new' && note.body === '') {
             deleteNote()
         } else if (noteId !== 'new') {
             updateNote()
+        } else if (noteId === 'new' && note.body !== null ){
+            createNote()
         }
         navigate('/')
+    }
+
+    let handleChange = (value) => {
+        setNote(note => ({...note, 'body':value}))
     }
     return (
         <div className='note'>
@@ -71,10 +77,11 @@ const NotePage = () => {
                 
                     <button onClick={deleteNote}>Delete</button>
                 ): (
-                    <button>Done</button>
+                    <button onClick={handleSubmit}>Done</button>
                 )}
             </div>
-            <textarea onChange={(e) => {setNote({...note, 'body':e.target.value})}} defaultValue={note?.body}></textarea>
+            <hr/>
+            <textarea onChange={(e) => {handleChange(e.target.value)}} value={note?.body}></textarea>
         </div>
     )
 }
