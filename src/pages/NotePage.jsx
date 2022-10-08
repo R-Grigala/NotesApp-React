@@ -1,4 +1,4 @@
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as ChevronLeft } from '../assets/chevron-left.svg'
 
